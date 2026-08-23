@@ -43,14 +43,14 @@ fun AppNavigation() {
                     val viewModel: PlanSelectionViewModel = viewModel()
                     PlanSelectionScreen(
                         viewModel = viewModel,
-                        onBack = { backStack.removeLastOrNull() }
+                        onPlanSelected = { backStack.removeLastOrNull() }
                     )
                 }
                 entry<Scoreboard> {
                     val viewModel: ScoreboardViewModel = viewModel()
                     ScoreboardScreen(
                         viewModel = viewModel,
-                        onBack = { backStack.removeLastOrNull() }
+                        onNavigateHome = { backStack.removeLastOrNull() }
                     )
                 }
                 entry<Permissions> {

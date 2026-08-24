@@ -62,18 +62,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     topSpeedKmh = 68f
                 )
 
-                // Stop the foreground service
-                TelematicsForegroundService.stop(getApplication())
+                // TODO: Wire up once runtime permissions flow is built
+                // TelematicsForegroundService.stop(getApplication())
 
                 state.copy(
                     isOnline = false,
                     shiftSummary = summary,
                     showSummary = true
-                    // Keep shiftStartTime so the summary can reference it
                 )
             } else {
                 // Going online — start shift
-                TelematicsForegroundService.start(getApplication())
+
+                // TODO: Wire up once runtime permissions flow is built
+                // TelematicsForegroundService.start(getApplication())
 
                 state.copy(
                     isOnline = true,

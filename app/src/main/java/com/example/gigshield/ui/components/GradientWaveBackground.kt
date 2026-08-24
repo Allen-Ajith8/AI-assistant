@@ -51,15 +51,15 @@ fun GradientWaveBackground(modifier: Modifier = Modifier, content: @Composable (
                 val shader = RuntimeShader(WAVY_SHADER)
                 shader.setFloatUniform("resolution", size.width, size.height)
                 shader.setFloatUniform("time", time)
-                shader.setColorUniform("horizonColor", android.graphics.Color.parseColor("#5227FF"))
-                shader.setColorUniform("waveColor", android.graphics.Color.parseColor("#FF9FFC"))
+                shader.setColorUniform("horizonColor", android.graphics.Color.parseColor("#0A0A0A")) // Deep Black
+                shader.setColorUniform("waveColor", android.graphics.Color.parseColor("#FFB800"))    // iQOO Yellow
 
                 onDrawBehind {
                     drawRect(brush = ShaderBrush(shader))
                 }
             } else {
                 // Fallback for older Android versions (static gradient)
-                onDrawBehind { drawRect(Color(0xFF5227FF)) }
+                onDrawBehind { drawRect(Color(0xFF332500)) }
             }
         }
     ) {

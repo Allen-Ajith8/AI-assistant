@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gigshield.data.model.InsuranceTier
 import com.example.gigshield.theme.*
+import com.example.gigshield.ui.components.GradientWaveBackground
 import kotlinx.coroutines.delay
 
 @Composable
@@ -51,13 +52,13 @@ fun HomeScreenContent(
     onNavigateToScoreboard: () -> Unit,
     onNavigateToPermissions: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DeepBase)
-            .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    GradientWaveBackground {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         // Top App Bar Area
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -166,7 +167,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(SurfaceCard)
+                    .background(SurfaceCard.copy(alpha = 0.7f))
                     .border(1.dp, SurfaceElevated, RoundedCornerShape(8.dp))
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -205,7 +206,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(SurfaceCard)
+                    .background(SurfaceCard.copy(alpha = 0.7f))
                     .border(1.dp, SurfaceElevated, RoundedCornerShape(8.dp))
                     .padding(16.dp)
             ) {
@@ -221,7 +222,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(SurfaceCard)
+                    .background(SurfaceCard.copy(alpha = 0.7f))
                     .border(1.dp, SurfaceElevated, RoundedCornerShape(8.dp))
                     .padding(16.dp)
             ) {
@@ -240,7 +241,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
-                .background(SurfaceCard)
+                .background(SurfaceCard.copy(alpha = 0.7f))
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -306,6 +307,7 @@ fun HomeScreenContent(
                     Text("End Shift")
                 }
             }
+        }
         }
     }
 }

@@ -167,7 +167,7 @@ fun ScoreboardScreen(
                             fontSize = 18.sp
                         )
                         Surface(
-                            color = DeepBase,
+                            color = androidx.compose.ui.graphics.Color(0xFF0A0A0A),
                             shape = RoundedCornerShape(4.dp)
                         ) {
                             Text(

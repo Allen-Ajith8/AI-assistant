@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsBike
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Speed
@@ -43,7 +44,8 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     onNavigateToPlanSelection: () -> Unit,
     onNavigateToScoreboard: () -> Unit,
-    onNavigateToPermissions: () -> Unit
+    onNavigateToPermissions: () -> Unit,
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -53,7 +55,8 @@ fun HomeScreen(
         onDismissSummary = { viewModel.dismissSummary() },
         onNavigateToPlanSelection = onNavigateToPlanSelection,
         onNavigateToScoreboard = onNavigateToScoreboard,
-        onNavigateToPermissions = onNavigateToPermissions
+        onNavigateToPermissions = onNavigateToPermissions,
+        onOpenDrawer = onOpenDrawer
     )
 }
 
@@ -65,7 +68,8 @@ fun HomeScreenContent(
     onDismissSummary: () -> Unit,
     onNavigateToPlanSelection: () -> Unit,
     onNavigateToScoreboard: () -> Unit,
-    onNavigateToPermissions: () -> Unit
+    onNavigateToPermissions: () -> Unit,
+    onOpenDrawer: () -> Unit
 ) {
     // Shift Summary Bottom Sheet
     if (uiState.showSummary && uiState.shiftSummary != null) {
@@ -117,17 +121,26 @@ fun HomeScreenContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = "$greeting, Rider",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextHighContrast
-                    )
-                    Text(
-                        text = dateText,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = TextMuted
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = onOpenDrawer, modifier = Modifier.padding(end = 8.dp)) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu",
+                            tint = TextHighContrast
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "$greeting, Rider",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = TextHighContrast
+                        )
+                        Text(
+                            text = dateText,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = TextMuted
+                        )
+                    }
                 }
                 // Profile icon
                 Box(
@@ -316,7 +329,19 @@ fun HomeScreenContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Interactive Chart
+            val chartData = remember { listOf(150f, 220f, 180f, 310f, 290f, 400f, uiState.currentEarnings) }
+            val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            
+            com.example.gigshield.ui.components.WeeklyEarningsChart(
+                dataPoints = chartData,
+                daysOfWeek = days,
+                lineColor = SafetyGreen
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Safe Rider Score Card
             Row(
@@ -550,7 +575,7 @@ fun ShiftSummaryContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = SafetyGreen, contentColor = DeepBase),
+            colors = ButtonDefaults.buttonColors(containerColor = SafetyGreen, contentColor = androidx.compose.ui.graphics.Color(0xFF0A0A0A)),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text("DONE", style = MaterialTheme.typography.labelLarge)
@@ -610,7 +635,8 @@ fun PreviewHomeScreen() {
             onDismissSummary = {},
             onNavigateToPlanSelection = {},
             onNavigateToScoreboard = {},
-            onNavigateToPermissions = {}
+            onNavigateToPermissions = {},
+            onOpenDrawer = {}
         )
     }
 }

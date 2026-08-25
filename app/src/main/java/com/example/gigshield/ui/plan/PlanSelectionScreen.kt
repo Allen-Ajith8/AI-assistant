@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lock
@@ -28,73 +30,80 @@ fun PlanSelectionScreen(
     
     var showConfirmDialog by remember { mutableStateOf(false) }
     var selectedTierToConfirm by remember { mutableStateOf<InsuranceTier?>(null) }
-    
-    // We'll mock the selection state here for UI demonstration
     var selectedTier by remember { mutableStateOf(uiState.selectedTier ?: InsuranceTier.INCOME_PROTECTOR) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(DeepBase)
-            .padding(20.dp)
+            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        Text(
-            text = "Insurance",
-            style = MaterialTheme.typography.labelLarge,
-            color = TextMuted
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Select Your Daily Protection",
-            style = MaterialTheme.typography.displayMedium,
-            color = TextHighContrast
-        )
-        
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        if (uiState.isLocked) {
-            Surface(
-                color = SurfaceElevated.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(8.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceElevated),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            Text(
+                text = "Insurance Options",
+                style = MaterialTheme.typography.labelLarge,
+                color = TextMuted
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "The Core Plans (Pay-Per-Day)",
+                style = MaterialTheme.typography.displayMedium,
+                color = TextHighContrast,
+                fontSize = 22.sp
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "These plans are billed only on the days you tap \"Start Work,\" deducted directly from your gig wallet or settled weekly.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = TextMuted,
+                fontSize = 14.sp
+            )
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            if (uiState.isLocked) {
+                Surface(
+                    color = SurfaceElevated.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceElevated),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(Icons.Default.Lock, contentDescription = "Locked", tint = ElectricBlue)
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Text("Tier Locked", style = MaterialTheme.typography.titleMedium, color = TextHighContrast)
-                        Text("Your tier is locked for the week.", style = MaterialTheme.typography.bodyMedium, color = TextMuted)
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.Lock, contentDescription = "Locked", tint = ElectricBlue)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text("Tier Locked", style = MaterialTheme.typography.titleMedium, color = TextHighContrast)
+                            Text("Your tier is locked for the week.", style = MaterialTheme.typography.bodyMedium, color = TextMuted)
+                        }
                     }
                 }
+                Spacer(modifier = Modifier.height(24.dp))
             }
-            Spacer(modifier = Modifier.height(24.dp))
-        }
 
-        // Tier 1 Card
-        TierCard(
-            tier = InsuranceTier.SHIFT_SHIELD,
-            isSelected = selectedTier == InsuranceTier.SHIFT_SHIELD,
-            isRecommended = false,
-            onSelect = { if (!uiState.isLocked) selectedTier = InsuranceTier.SHIFT_SHIELD }
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Tier 2 Card (Recommended)
-        TierCard(
-            tier = InsuranceTier.INCOME_PROTECTOR,
-            isSelected = selectedTier == InsuranceTier.INCOME_PROTECTOR,
-            isRecommended = true,
-            onSelect = { if (!uiState.isLocked) selectedTier = InsuranceTier.INCOME_PROTECTOR }
-        )
-        
-        Spacer(modifier = Modifier.weight(1f))
+            // --- PLAN OPTIONS ---
+            TierOptionCard(
+                tier = InsuranceTier.SHIFT_SHIELD,
+                isSelected = selectedTier == InsuranceTier.SHIFT_SHIELD,
+                isRecommended = false,
+                onSelect = { if (!uiState.isLocked) selectedTier = InsuranceTier.SHIFT_SHIELD }
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            TierOptionCard(
+                tier = InsuranceTier.INCOME_PROTECTOR,
+                isSelected = selectedTier == InsuranceTier.INCOME_PROTECTOR,
+                isRecommended = true,
+                onSelect = { if (!uiState.isLocked) selectedTier = InsuranceTier.INCOME_PROTECTOR }
+            )
+            
+            Spacer(modifier = Modifier.height(32.dp))
+        }
         
         Button(
             onClick = {
@@ -104,10 +113,11 @@ fun PlanSelectionScreen(
             enabled = !uiState.isLocked,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 24.dp)
                 .height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = SafetyGreen,
-                contentColor = DeepBase,
+                containerColor = if (selectedTier == InsuranceTier.INCOME_PROTECTOR) SafetyGreen else ElectricBlue,
+                contentColor = androidx.compose.ui.graphics.Color(0xFF0A0A0A),
                 disabledContainerColor = SurfaceElevated,
                 disabledContentColor = TextMuted
             ),
@@ -115,8 +125,6 @@ fun PlanSelectionScreen(
         ) {
             Text("CONFIRM WEEKLY LOCK-IN", style = MaterialTheme.typography.labelLarge)
         }
-        
-        Spacer(modifier = Modifier.height(24.dp))
     }
     
     if (showConfirmDialog && selectedTierToConfirm != null) {
@@ -126,7 +134,7 @@ fun PlanSelectionScreen(
             titleContentColor = TextHighContrast,
             textContentColor = TextMuted,
             title = { Text("Confirm Selection") },
-            text = { Text("You are selecting ${selectedTierToConfirm?.displayName}. This selection will be locked for the next 7 days and cannot be changed.") },
+            text = { Text("You are selecting ${selectedTierToConfirm?.displayName}. This selection will be locked for the next 7 days.") },
             confirmButton = {
                 Button(
                     onClick = { 
@@ -134,7 +142,7 @@ fun PlanSelectionScreen(
                         showConfirmDialog = false
                         onPlanSelected()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = SafetyGreen, contentColor = DeepBase)
+                    colors = ButtonDefaults.buttonColors(containerColor = SafetyGreen, contentColor = androidx.compose.ui.graphics.Color(0xFF0A0A0A))
                 ) {
                     Text("Confirm", style = MaterialTheme.typography.labelLarge)
                 }
@@ -149,7 +157,7 @@ fun PlanSelectionScreen(
 }
 
 @Composable
-fun TierCard(
+fun TierOptionCard(
     tier: InsuranceTier,
     isSelected: Boolean,
     isRecommended: Boolean,
@@ -207,22 +215,23 @@ fun TierCard(
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // This is the loop that puts all the data into the cards themselves!
             tier.getBenefitsList().forEach { benefit ->
                 Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
+                    modifier = Modifier.padding(vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         Icons.Default.Check,
                         contentDescription = "Included",
                         tint = if (isRecommended) SafetyGreen else ElectricBlue,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = benefit,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = TextMuted,
+                        color = TextHighContrast,
                         fontSize = 14.sp
                     )
                 }

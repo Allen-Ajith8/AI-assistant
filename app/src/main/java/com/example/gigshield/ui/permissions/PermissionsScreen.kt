@@ -49,7 +49,7 @@ fun PermissionsScreen(
                     enabled = allGranted,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = SafetyGreen,
-                        contentColor = DeepBase,
+                        contentColor = androidx.compose.ui.graphics.Color(0xFF0A0A0A),
                         disabledContainerColor = SurfaceElevated,
                         disabledContentColor = TextMuted
                     ),

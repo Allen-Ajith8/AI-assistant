@@ -102,4 +102,13 @@ dependencies {
   // Coroutines & Serialization
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.serialization.json)
+  
+  // Firebase (BOM)
+  implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+  implementation("com.google.firebase:firebase-analytics")
+  implementation("com.google.firebase:firebase-auth")
+  implementation("com.google.firebase:firebase-firestore")
+  implementation("com.google.firebase:firebase-functions")
+  implementation("com.google.firebase:firebase-storage")
+  implementation("com.google.firebase:firebase-messaging")
 }

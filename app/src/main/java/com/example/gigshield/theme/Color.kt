@@ -3,7 +3,7 @@ package com.example.gigshield.theme
 import androidx.compose.ui.graphics.Color
 
 // iQOO Brand Palette — Yellow & Black
-val DeepBase = Color(0xFF0A0A0A)           // Pure black base
+val DeepBase = Color.Transparent           // Transparent to show gradient
 val SurfaceCard = Color(0xFF1A1A1A)        // Dark card
 val SurfaceElevated = Color(0xFF2A2A2A)    // Elevated surface
 val SafetyGreen = Color(0xFFFFB800)        // iQOO Yellow (primary accent)

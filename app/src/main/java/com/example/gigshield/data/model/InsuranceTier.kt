@@ -16,7 +16,7 @@ enum class InsuranceTier(
         accidentalDeath = 500000,
         hospitalization = 50000,
         thirdPartyLiability = 50000,
-        displayName = "Shift Shield",
+        displayName = "Shift Shield (Basic)",
         description = "Basic coverage during shifts"
     ),
     INCOME_PROTECTOR(
@@ -24,7 +24,7 @@ enum class InsuranceTier(
         familySupport = 400000,
         childEducation = 100000,
         vehicleEmiWaiver = true,
-        displayName = "Income Protector",
+        displayName = "Income Protector (Premium)",
         description = "Comprehensive income protection"
     );
 
@@ -35,15 +35,18 @@ enum class InsuranceTier(
 
     fun getBenefitsList(): List<String> = when (this) {
         SHIFT_SHIELD -> listOf(
-            "₹5 Lakh Accidental Death & Disability",
-            "₹50,000 In-Patient Hospitalization",
-            "₹50,000 Third-Party Liability"
+            "₹5,00,000 standard lump sum to nominee",
+            "Up to ₹50,000 for treatments (In-Patient)",
+            "Up to ₹50,000 for damages (Third-Party)",
+            "For Part-time gig workers"
         )
         INCOME_PROTECTOR -> listOf(
-            "₹4 Lakh Family Support Lump Sum",
-            "₹1 Lakh Child Education Fund",
-            "Vehicle EMI Waiver",
-            "All Shift Shield benefits included"
+            "The \"4+1\" Lump Sum:",
+            "  • ₹4,00,000 Family Support",
+            "  • ₹1,00,000 Child Education Fund",
+            "Up to ₹50,000 for treatments (In-Patient)",
+            "Up to ₹50,000 for damages (Third-Party)",
+            "For Full-time gig workers"
         )
     }
 }

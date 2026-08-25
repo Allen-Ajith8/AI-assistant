@@ -26,12 +26,27 @@ class Converters {
     fun toDrivingEventType(value: String) = enumValueOf<DrivingEventType>(value)
 }
 
-@Database(entities = [Policy::class, DrivingEvent::class, SafeRiderScore::class], version = 1)
+@Database(
+    entities = [
+        com.example.gigshield.data.model.DrivingEvent::class,
+        com.example.gigshield.data.model.SafeRiderScore::class,
+        com.example.gigshield.data.model.Policy::class,
+        WorkSessionEntity::class,
+        ClaimEntity::class,
+        TransactionEntity::class
+    ],
+    version = 2,
+    exportSchema = true
+)
 @TypeConverters(Converters::class)
 abstract class GigShieldDatabase : RoomDatabase() {
-    abstract fun policyDao(): PolicyDao
+    
     abstract fun drivingEventDao(): DrivingEventDao
     abstract fun scoreDao(): ScoreDao
+    abstract fun policyDao(): PolicyDao
+    abstract fun workSessionDao(): WorkSessionDao
+    abstract fun claimDao(): ClaimDao
+    abstract fun transactionDao(): TransactionDao
 
     companion object {
         @Volatile

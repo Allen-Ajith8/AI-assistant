@@ -1,15 +1,13 @@
 package com.example.gigshield.ui.home
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+<<<<<<< Updated upstream
 import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MonetizationOn
@@ -17,27 +15,19 @@ import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.TrendingUp
+=======
+import androidx.compose.material.icons.automirrored.filled.Send
+>>>>>>> Stashed changes
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.gigshield.data.model.InsuranceTier
 import com.example.gigshield.theme.*
-import com.example.gigshield.ui.components.GradientWaveBackground
-import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -49,19 +39,25 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    HomeScreenContent(
+    ChatScreenContent(
         uiState = uiState,
+<<<<<<< Updated upstream
         onToggleOnline = { viewModel.toggleOnlineStatus() },
         onDismissSummary = { viewModel.dismissSummary() },
         onNavigateToPlanSelection = onNavigateToPlanSelection,
         onNavigateToScoreboard = onNavigateToScoreboard,
         onNavigateToPermissions = onNavigateToPermissions,
         onOpenDrawer = onOpenDrawer
+=======
+        onInputTextChanged = viewModel::onInputTextChanged,
+        onSendMessage = viewModel::sendMessage
+>>>>>>> Stashed changes
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+<<<<<<< Updated upstream
 fun HomeScreenContent(
     uiState: UiState,
     onToggleOnline: () -> Unit,
@@ -70,57 +66,47 @@ fun HomeScreenContent(
     onNavigateToScoreboard: () -> Unit,
     onNavigateToPermissions: () -> Unit,
     onOpenDrawer: () -> Unit
+=======
+fun ChatScreenContent(
+    uiState: ChatUiState,
+    onInputTextChanged: (String) -> Unit,
+    onSendMessage: () -> Unit
+>>>>>>> Stashed changes
 ) {
-    // Shift Summary Bottom Sheet
-    if (uiState.showSummary && uiState.shiftSummary != null) {
-        ModalBottomSheet(
-            onDismissRequest = onDismissSummary,
-            containerColor = SurfaceCard,
-            contentColor = TextHighContrast,
-            dragHandle = {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .width(40.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(TextMuted)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { 
+                    Text(
+                        "AI Assistant", 
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = TextHighContrast
+                    ) 
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = DeepBase,
+                    titleContentColor = TextHighContrast
                 )
-            }
-        ) {
-            ShiftSummaryContent(
-                summary = uiState.shiftSummary,
-                tierName = uiState.currentTier?.displayName ?: "No Plan",
-                onDismiss = onDismissSummary
             )
-        }
-    }
-
-    GradientWaveBackground {
+        },
+        containerColor = DeepBase
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingValues)
         ) {
-            // Greeting + Date Header
-            val greeting = remember {
-                val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-                when {
-                    hour < 12 -> "Good morning"
-                    hour < 17 -> "Good afternoon"
-                    else -> "Good evening"
-                }
-            }
-            val dateText = remember {
-                SimpleDateFormat("EEE, MMM d", Locale.getDefault()).format(Date())
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            // Chat Messages List
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+<<<<<<< Updated upstream
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onOpenDrawer, modifier = Modifier.padding(end = 8.dp)) {
                         Icon(
@@ -152,101 +138,42 @@ fun HomeScreenContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("R", color = ElectricBlue, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+=======
+                items(uiState.messages) { message ->
+                    ChatMessageBubble(message = message)
+>>>>>>> Stashed changes
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Status Chip
-            Surface(
-                color = if (uiState.isOnline) SafetyGreen.copy(alpha = 0.15f) else SurfaceElevated.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(20.dp),
-                border = androidx.compose.foundation.BorderStroke(
-                    1.dp,
-                    if (uiState.isOnline) SafetyGreen.copy(alpha = 0.5f) else Color.Transparent
-                )
-            ) {
-                Text(
-                    text = if (uiState.isOnline) "● SHIFT ACTIVE" else "○ OFFLINE",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = if (uiState.isOnline) SafetyGreen else TextMuted,
-                    fontSize = 12.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Timer Display
-            var timeText by remember { mutableStateOf("00:00:00") }
-            LaunchedEffect(uiState.isOnline, uiState.shiftStartTime) {
-                if (uiState.isOnline && uiState.shiftStartTime != null) {
-                    while (true) {
-                        val diff = (System.currentTimeMillis() - uiState.shiftStartTime) / 1000
-                        val h = diff / 3600
-                        val m = (diff % 3600) / 60
-                        val s = diff % 60
-                        timeText = String.format("%02d:%02d:%02d", h, m, s)
-                        delay(1000)
-                    }
-                } else {
-                    timeText = "00:00:00"
-                }
-            }
-
-            Text(
-                text = timeText,
-                style = MaterialTheme.typography.displayLarge,
-                color = TextHighContrast,
-                letterSpacing = 2.sp
+            // Input Area
+            ChatInputArea(
+                inputText = uiState.inputText,
+                onInputTextChanged = onInputTextChanged,
+                onSendMessage = onSendMessage
             )
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Main Toggle Button
-            val buttonColor by animateColorAsState(
-                targetValue = if (uiState.isOnline) SafetyGreen else SurfaceElevated,
-                label = "buttonColor"
-            )
-
+@Composable
+fun ChatMessageBubble(message: ChatMessage) {
+    val isUser = message.isUser
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start
+    ) {
+        if (!isUser) {
+            // AI Avatar
             Box(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(36.dp)
                     .clip(CircleShape)
-                    .background(if (uiState.isOnline) SafetyGreen.copy(alpha = 0.08f) else ElectricBlue.copy(alpha = 0.05f))
-                    .clickable(onClick = onToggleOnline),
+                    .background(SafetyGreen),
                 contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(160.dp)
-                        .clip(CircleShape)
-                        .background(buttonColor)
-                        .border(
-                            width = 2.dp,
-                            color = if (uiState.isOnline) SafetyGreen else ElectricBlue.copy(alpha = 0.5f),
-                            shape = CircleShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            imageVector = if (uiState.isOnline) Icons.Default.Timer else Icons.Default.Shield,
-                            contentDescription = null,
-                            tint = if (uiState.isOnline) DeepBase else ElectricBlue,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = if (uiState.isOnline) "END SHIFT" else "GO ONLINE",
-                            color = if (uiState.isOnline) DeepBase else ElectricBlue,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 16.sp
-                        )
-                    }
-                }
+                Text("AI", color = DeepBase, fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }
+<<<<<<< Updated upstream
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -539,34 +466,47 @@ fun ShiftSummaryContent(
             SummaryMetric("Distance", String.format("%.1f km", summary.distanceKm), ElectricBlue)
             SummaryMetric("Earnings", String.format("₹%.0f", summary.estimatedEarnings), SafetyGreen)
             SummaryMetric("Score", "${summary.safeRiderScore}", SafetyGreen)
+=======
+            Spacer(modifier = Modifier.width(12.dp))
+>>>>>>> Stashed changes
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Driving events breakdown
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(DeepBase)
-                .padding(16.dp)
+                .weight(1f, fill = false)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 20.dp,
+                        topEnd = 20.dp,
+                        bottomStart = if (isUser) 20.dp else 4.dp,
+                        bottomEnd = if (isUser) 4.dp else 20.dp
+                    )
+                )
+                .background(if (isUser) SurfaceCard else SurfaceElevated)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            Column {
-                Text("Driving Events", style = MaterialTheme.typography.labelLarge, color = TextMuted)
-                Spacer(modifier = Modifier.height(12.dp))
-                EventRow("Harsh Braking", summary.harshBrakingCount, ErrorRed)
-                EventRow("Rapid Acceleration", summary.rapidAccelCount, Color(0xFFFFD740))
-                EventRow("Sharp Cornering", summary.sharpCorneringCount, ElectricBlue)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Top Speed", style = MaterialTheme.typography.bodyLarge, color = TextMuted, fontSize = 14.sp)
-                    Text(String.format("%.0f km/h", summary.topSpeedKmh), style = MaterialTheme.typography.labelLarge, color = TextHighContrast)
-                }
+            Text(
+                text = message.text,
+                color = TextHighContrast,
+                style = MaterialTheme.typography.bodyLarge,
+                fontSize = 16.sp
+            )
+        }
+
+        if (isUser) {
+            Spacer(modifier = Modifier.width(12.dp))
+            // User Avatar
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(ElectricBlue),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("U", color = TextHighContrast, fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }
         }
+<<<<<<< Updated upstream
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -582,61 +522,65 @@ fun ShiftSummaryContent(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+=======
+>>>>>>> Stashed changes
     }
 }
 
 @Composable
-fun SummaryMetric(label: String, value: String, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = value, style = MaterialTheme.typography.titleLarge, color = color, fontWeight = FontWeight.Bold, fontSize = 22.sp)
-        Text(text = label, style = MaterialTheme.typography.labelMedium, color = TextMuted)
-    }
-}
-
-@Composable
-fun EventRow(label: String, count: Int, color: Color) {
+fun ChatInputArea(
+    inputText: String,
+    onInputTextChanged: (String) -> Unit,
+    onSendMessage: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .background(DeepBase)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .clip(CircleShape)
-                    .background(color)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = label, style = MaterialTheme.typography.bodyLarge, color = TextMuted, fontSize = 14.sp)
-        }
-        Text(text = "$count", style = MaterialTheme.typography.labelLarge, color = TextHighContrast)
-    }
-}
-
-@Preview
-@Composable
-fun PreviewHomeScreen() {
-    GigShieldTheme {
-        HomeScreenContent(
-            uiState = UiState(
-                isOnline = true,
-                currentTier = InsuranceTier.INCOME_PROTECTOR,
-                todayScore = 88,
-                weeklyShiftCount = 12,
-                streakDays = 5,
-                earnedRewards = 45,
-                distanceKm = 18.4f,
-                currentEarnings = 248f
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = onInputTextChanged,
+            placeholder = { Text("Message AI Assistant...", color = TextMuted) },
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(24.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = SurfaceCard,
+                unfocusedContainerColor = SurfaceCard,
+                focusedBorderColor = SafetyGreen,
+                unfocusedBorderColor = Color.Transparent,
+                focusedTextColor = TextHighContrast,
+                unfocusedTextColor = TextHighContrast,
+                cursorColor = SafetyGreen
             ),
+<<<<<<< Updated upstream
             onToggleOnline = {},
             onDismissSummary = {},
             onNavigateToPlanSelection = {},
             onNavigateToScoreboard = {},
             onNavigateToPermissions = {},
             onOpenDrawer = {}
+=======
+            maxLines = 4
+>>>>>>> Stashed changes
         )
+        
+        Spacer(modifier = Modifier.width(12.dp))
+        
+        IconButton(
+            onClick = onSendMessage,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+                .background(if (inputText.isNotBlank()) SafetyGreen else SurfaceElevated)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Send,
+                contentDescription = "Send",
+                tint = if (inputText.isNotBlank()) DeepBase else TextMuted
+            )
+        }
     }
 }

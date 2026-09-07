@@ -19,19 +19,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gigshield.theme.*
 
+import androidx.compose.material.icons.filled.Menu
+
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
     onNavigateToPlanSelection: () -> Unit,
     onNavigateToScoreboard: () -> Unit,
-    onNavigateToPermissions: () -> Unit
+    onNavigateToPermissions: () -> Unit,
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     ChatScreenContent(
         uiState = uiState,
         onInputTextChanged = viewModel::onInputTextChanged,
-        onSendMessage = viewModel::sendMessage
+        onSendMessage = viewModel::sendMessage,
+        onOpenDrawer = onOpenDrawer
     )
 }
 
@@ -40,7 +44,8 @@ fun HomeScreen(
 fun ChatScreenContent(
     uiState: ChatUiState,
     onInputTextChanged: (String) -> Unit,
-    onSendMessage: () -> Unit
+    onSendMessage: () -> Unit,
+    onOpenDrawer: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -52,6 +57,11 @@ fun ChatScreenContent(
                         fontWeight = FontWeight.Bold,
                         color = TextHighContrast
                     ) 
+                },
+                navigationIcon = {
+                    IconButton(onClick = onOpenDrawer) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = TextHighContrast)
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = DeepBase,
